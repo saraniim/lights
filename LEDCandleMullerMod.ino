@@ -42,27 +42,27 @@ void setup() {
   // set all initial hues, sats, intensities, and colorConverters
   for (int p = 0; p < 2; p++) {
     int thisPixel = highPixels[p];
-    hues[thisPixel] = random(1200) + 1200;
+    hues[thisPixel] = random(1200) + 5000;
     saturations[thisPixel] = random(10) + 240;
-    intensities[thisPixel] = random(20) + 200;
-  }
-
-  for (int p = 0; p < 2; p++) {
-    int thisPixel = lowPixels[p];
-    hues[thisPixel] = random(800) + 30000;
-    saturations[thisPixel] = 205;
     intensities[thisPixel] = random(20) + 100;
   }
 
   for (int p = 0; p < 2; p++) {
+    int thisPixel = lowPixels[p];
+    hues[thisPixel] = random(300) + 30000;
+    saturations[thisPixel] = 205;
+    intensities[thisPixel] = random(20) + 80;
+  }
+
+  for (int p = 0; p < 2; p++) {
     int thisPixel = lightPixels[p];
-    hues[thisPixel] = random(500) + 800;
-    saturations[thisPixel] = random(20) + 220;
-    intensities[thisPixel] = random(40) + 110;
+    hues[thisPixel] = random(200) + 3500;
+    saturations[thisPixel] = random(20) + 200;
+    intensities[thisPixel] = random(40) + 90;
   }
 
 
-  hues[bluePixel] = random(200) + 30000;
+  hues[bluePixel] = random(200) + 10000;
   saturations[bluePixel] = random(10) + 230;
   intensities[bluePixel] = random(20) + 30;
 
@@ -94,7 +94,7 @@ void loop() {
     candle.setPixelColor(thisPixel, thisColor);
   }
   candle.show();
-  delay(10);
+  delay(30);
   yield();
 }
 
@@ -104,6 +104,9 @@ void fastLoop() {
     int thisPixel = lowPixels[p];
     // change the hue:
     hues[thisPixel] = hues[thisPixel] + changeValues[thisPixel];
+  intensities[thisPixel] += (random(3) - 1);
+  intensities[thisPixel] = constrain(intensities[thisPixel], 0, 20);       
+    
     // keep the change within the min/max range,
     // but add a random -1 to 2:
     hues[thisPixel] += (random(3) - 1);
@@ -126,8 +129,11 @@ void medLoop() {
     // change the hue:
     hues[thisPixel] = hues[thisPixel] + changeValues[thisPixel];
     // keep the change within the min/max range,
-    // but change directions at the extremes:
-    if (hues[thisPixel] < 4 || hues[thisPixel] > 20) {
+  // change the intensity and constrain it:
+  intensities[thisPixel] += (random(3) - 1);
+  intensities[thisPixel] = constrain(intensities[thisPixel], 0, 10);   
+  // but change directions at the extremes:
+    if (hues[thisPixel] < 10 || hues[thisPixel] > 20) {
       changeValues[thisPixel] = -changeValues[thisPixel];
     }
     long thisColor = candle.ColorHSV(hues[thisPixel],
@@ -137,6 +143,7 @@ void medLoop() {
   }
   candle.show();
   delay(60);
+  yield();
 }
 
 void slowLoop() {
@@ -156,7 +163,7 @@ void slowLoop() {
                                    intensities[bluePixel]);
   candle.setPixelColor(bluePixel, thisColor);
   candle.show();
-  delay(100);
+  delay(20);
   yield();
 }
 
@@ -177,6 +184,6 @@ void lentoLoop() {
                                    intensities[yellowPixel]);
   candle.setPixelColor(yellowPixel, thisColor);
   candle.show();
-  delay(120);
+  delay(50);
   yield();
 }
